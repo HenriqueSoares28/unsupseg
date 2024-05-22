@@ -38,7 +38,7 @@ namespace gft
         if (aux->dy != NULL)
           free(aux->dy);
         if (aux->dz != NULL)
-          free(aux->dy);
+          free(aux->dz);
         free(aux);
         *A = NULL;
       }

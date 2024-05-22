@@ -155,6 +155,9 @@ int main(int argc, char **argv){
   ctmp = gft::CImage::RandomColorize(label);
   gft::CImage::Write(ctmp, (char *)"label.ppm");
   gft::CImage::Destroy(&ctmp);
+  ctmp = gft::CImage::ColorizeByAverageColor(cimg, label);
+  gft::CImage::Write(ctmp, (char *)"labelcolor.ppm");
+  gft::CImage::Destroy(&ctmp);
   
   printf("(Min,Max): (%d %d)\n",
 	 gft::Image32::GetMinVal(label),

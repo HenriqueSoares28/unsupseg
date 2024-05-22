@@ -1,40 +1,52 @@
+# Makefile for unsupseg project
+
+# Compilers
+CC = gcc
+CXX = g++
+
+# Compiler and linker flags
+FLAGS = -Wall -O3 -lpthread -msse -std=c++11
+LINKS = -lz -lm -fopenmp
+
+# Libraries
+GFTLIB = -L$(GFT_DIR)/lib -lgft
+GFTFLAGS = -I$(GFT_DIR)/include
+
+export GFT_DIR=gft
+
+
+# Targets
 all: unsupseg unsupseg_mergehistory mergehistory_unsupseg mergehistory_ctree
 
-#Compiladores
-CC=gcc
-CXX=g++
-
-FLAGS= -Wall -O3 -lpthread -msse
-#-march=native 
-
-LINKS= -lz -lm -fopenmp
-
-#Bibliotecas
-GFTLIB  = -L$(GFT_DIR)/lib -lgft
-GFTFLAGS  = -I$(GFT_DIR)/include
-
-
-#Rules
+# Rule for building the GFT library
 libgft:
 	$(MAKE) -C $(GFT_DIR)
 
-unsupseg: unsupseg.cpp libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	unsupseg.cpp $(GFTLIB) -o unsupseg $(LINKS)
+# Rules for building the executables
+unsupseg: unsupseg.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) unsupseg.o $(GFTLIB) -o unsupseg $(LINKS)
 
-unsupseg_mergehistory: unsupseg_mergehistory.cpp libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	unsupseg_mergehistory.cpp $(GFTLIB) -o unsupseg_mergehistory $(LINKS)
+unsupseg.o: unsupseg.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c unsupseg.cpp
 
-mergehistory_unsupseg: mergehistory_unsupseg.cpp libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	mergehistory_unsupseg.cpp $(GFTLIB) -o mergehistory_unsupseg $(LINKS)
+unsupseg_mergehistory: unsupseg_mergehistory.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) unsupseg_mergehistory.o $(GFTLIB) -o unsupseg_mergehistory $(LINKS)
 
-mergehistory_ctree: mergehistory_ctree.cpp libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) \
-	mergehistory_ctree.cpp $(GFTLIB) -o mergehistory_ctree $(LINKS)
+unsupseg_mergehistory.o: unsupseg_mergehistory.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c unsupseg_mergehistory.cpp
 
+mergehistory_unsupseg: mergehistory_unsupseg.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) mergehistory_unsupseg.o $(GFTLIB) -o mergehistory_unsupseg $(LINKS)
+
+mergehistory_unsupseg.o: mergehistory_unsupseg.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c mergehistory_unsupseg.cpp
+
+mergehistory_ctree: mergehistory_ctree.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) mergehistory_ctree.o $(GFTLIB) -o mergehistory_ctree $(LINKS)
+
+mergehistory_ctree.o: mergehistory_ctree.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c mergehistory_ctree.cpp
+
+# Clean rule
 clean:
 	$(RM) *~ *.o unsupseg unsupseg_mergehistory mergehistory_unsupseg mergehistory_ctree
-
-

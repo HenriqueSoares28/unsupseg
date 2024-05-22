@@ -22,6 +22,7 @@ namespace gft{
     void    Copy(sCImage *cimg, sCImage *sub, Pixel l);
 
     sCImage *RandomColorize(sImage32 *img);
+    sCImage *ColorizeByAverageColor(sCImage *orig, sImage32 *label);
     
     sCImage *Read(char *filename);
     void    Write(sCImage *cimg, char *filename);

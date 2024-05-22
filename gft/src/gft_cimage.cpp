@@ -1,5 +1,6 @@
 
 #include "gft_cimage.h"
+#include <vector>
 
 namespace gft
 {
@@ -65,6 +66,47 @@ namespace gft
       gft::FreeIntArray(&colormap);
       return cimg;
     }
+
+    gft::sCImage *ColorizeByAverageColor(gft::sCImage *orig, gft::sImage32 *label) {
+      int n = label->ncols * label->nrows;
+      int Imax = gft::Image32::GetMaxVal(label);
+      
+      std::vector<long> sum_r(Imax + 1, 0);
+      std::vector<long> sum_g(Imax + 1, 0);
+      std::vector<long> sum_b(Imax + 1, 0);
+      std::vector<int> count(Imax + 1, 0);
+      
+      for (int p = 0; p < n; p++) {
+        int lbl = label->data[p];
+        sum_r[lbl] += orig->C[0]->data[p];
+        sum_g[lbl] += orig->C[1]->data[p];
+        sum_b[lbl] += orig->C[2]->data[p];
+        count[lbl]++;
+      }
+      
+      std::vector<int> avg_r(Imax + 1, 0);
+      std::vector<int> avg_g(Imax + 1, 0);
+      std::vector<int> avg_b(Imax + 1, 0);
+      
+      for (int i = 1; i <= Imax; i++) {
+        if (count[i] > 0) {
+          avg_r[i] = sum_r[i] / count[i];
+          avg_g[i] = sum_g[i] / count[i];
+          avg_b[i] = sum_b[i] / count[i];
+        }
+      }
+      
+      gft::sCImage *cimg = gft::CImage::Create(label);
+      for (int p = 0; p < n; p++) {
+        int lbl = label->data[p];
+        cimg->C[0]->data[p] = avg_r[lbl];
+        cimg->C[1]->data[p] = avg_g[lbl];
+        cimg->C[2]->data[p] = avg_b[lbl];
+      }
+      
+      return cimg;
+    }
+
 
     sCImage *Read(char *filename)
     {
