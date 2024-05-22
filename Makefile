@@ -14,39 +14,45 @@ GFTFLAGS = -I$(GFT_DIR)/include
 
 export GFT_DIR=gft
 
+# Directories
+BINDIR = bin
+OBJDIR = obj
+
+# Ensure directories exist
+$(shell mkdir -p $(BINDIR) $(OBJDIR))
 
 # Targets
-all: unsupseg unsupseg_mergehistory mergehistory_unsupseg mergehistory_ctree
+all: $(BINDIR)/unsupseg $(BINDIR)/unsupseg_mergehistory $(BINDIR)/mergehistory_unsupseg $(BINDIR)/mergehistory_ctree
 
 # Rule for building the GFT library
 libgft:
 	$(MAKE) -C $(GFT_DIR)
 
 # Rules for building the executables
-unsupseg: unsupseg.o libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) unsupseg.o $(GFTLIB) -o unsupseg $(LINKS)
+$(BINDIR)/unsupseg: $(OBJDIR)/unsupseg.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) $(OBJDIR)/unsupseg.o $(GFTLIB) -o $(BINDIR)/unsupseg $(LINKS)
 
-unsupseg.o: unsupseg.cpp
-	$(CXX) $(FLAGS) $(GFTFLAGS) -c unsupseg.cpp
+$(OBJDIR)/unsupseg.o: unsupseg.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c unsupseg.cpp -o $(OBJDIR)/unsupseg.o
 
-unsupseg_mergehistory: unsupseg_mergehistory.o libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) unsupseg_mergehistory.o $(GFTLIB) -o unsupseg_mergehistory $(LINKS)
+$(BINDIR)/unsupseg_mergehistory: $(OBJDIR)/unsupseg_mergehistory.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) $(OBJDIR)/unsupseg_mergehistory.o $(GFTLIB) -o $(BINDIR)/unsupseg_mergehistory $(LINKS)
 
-unsupseg_mergehistory.o: unsupseg_mergehistory.cpp
-	$(CXX) $(FLAGS) $(GFTFLAGS) -c unsupseg_mergehistory.cpp
+$(OBJDIR)/unsupseg_mergehistory.o: unsupseg_mergehistory.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c unsupseg_mergehistory.cpp -o $(OBJDIR)/unsupseg_mergehistory.o
 
-mergehistory_unsupseg: mergehistory_unsupseg.o libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) mergehistory_unsupseg.o $(GFTLIB) -o mergehistory_unsupseg $(LINKS)
+$(BINDIR)/mergehistory_unsupseg: $(OBJDIR)/mergehistory_unsupseg.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) $(OBJDIR)/mergehistory_unsupseg.o $(GFTLIB) -o $(BINDIR)/mergehistory_unsupseg $(LINKS)
 
-mergehistory_unsupseg.o: mergehistory_unsupseg.cpp
-	$(CXX) $(FLAGS) $(GFTFLAGS) -c mergehistory_unsupseg.cpp
+$(OBJDIR)/mergehistory_unsupseg.o: mergehistory_unsupseg.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c mergehistory_unsupseg.cpp -o $(OBJDIR)/mergehistory_unsupseg.o
 
-mergehistory_ctree: mergehistory_ctree.o libgft
-	$(CXX) $(FLAGS) $(GFTFLAGS) mergehistory_ctree.o $(GFTLIB) -o mergehistory_ctree $(LINKS)
+$(BINDIR)/mergehistory_ctree: $(OBJDIR)/mergehistory_ctree.o libgft
+	$(CXX) $(FLAGS) $(GFTFLAGS) $(OBJDIR)/mergehistory_ctree.o $(GFTLIB) -o $(BINDIR)/mergehistory_ctree $(LINKS)
 
-mergehistory_ctree.o: mergehistory_ctree.cpp
-	$(CXX) $(FLAGS) $(GFTFLAGS) -c mergehistory_ctree.cpp
+$(OBJDIR)/mergehistory_ctree.o: mergehistory_ctree.cpp
+	$(CXX) $(FLAGS) $(GFTFLAGS) -c mergehistory_ctree.cpp -o $(OBJDIR)/mergehistory_ctree.o
 
 # Clean rule
 clean:
-	$(RM) *~ *.o unsupseg unsupseg_mergehistory mergehistory_unsupseg mergehistory_ctree
+	$(RM) *~ $(OBJDIR)/*.o $(BINDIR)/unsupseg $(BINDIR)/unsupseg_mergehistory $(BINDIR)/mergehistory_unsupseg $(BINDIR)/mergehistory_ctree
