@@ -1,6 +1,7 @@
 import subprocess
 from PIL import Image
 import numpy as np
+import cv2
 import os
 
 class Unsupseg:
@@ -9,10 +10,10 @@ class Unsupseg:
 
     def convert_image_to_ppm(self, image_path):
         # Check if the image is a PNG or JPG and convert it to PPM
-        if image_path.endswith(".png") or image_path.endswith(".jpg") or image_path.endswith(".jpeg") or image_path.endswith(".tif"):
-            img = Image.open(image_path)
+        if image_path.lower().endswith((".png", ".jpg", ".jpeg", ".tif")):
+            image = cv2.imread(image_path)
             ppm_image_path = os.path.splitext(image_path)[0] + ".ppm"
-            img.save(ppm_image_path)
+            cv2.imwrite(ppm_image_path, image)
             return ppm_image_path
         return image_path
 
