@@ -9,7 +9,7 @@ class Unsupseg:
 
     def convert_image_to_ppm(self, image_path):
         # Check if the image is a PNG or JPG and convert it to PPM
-        if image_path.endswith(".png") or image_path.endswith(".jpg") or image_path.endswith(".jpeg"):
+        if image_path.endswith(".png") or image_path.endswith(".jpg") or image_path.endswith(".jpeg") or image_path.endswith(".tif"):
             img = Image.open(image_path)
             ppm_image_path = os.path.splitext(image_path)[0] + ".ppm"
             img.save(ppm_image_path)
