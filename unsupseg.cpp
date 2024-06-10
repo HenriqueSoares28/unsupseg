@@ -121,9 +121,9 @@ int main(int argc, char **argv)
                gft::Image32::GetMinVal(spixels),
                gft::Image32::GetMaxVal(spixels));
 
-        gft::Image32::Write(spixels, (char *)"out/spixels.pgm");
+        gft::Image32::Write(spixels, (char *)"unsupseg/out/spixels.pgm");
         ctmp = gft::CImage::RandomColorize(spixels);
-        gft::CImage::Write(ctmp, (char *)"out/spixels.ppm");
+        gft::CImage::Write(ctmp, (char *)"unsupseg/out/spixels.ppm");
         gft::CImage::Destroy(&ctmp);
 
         /*Region Adjacency Graph (RAG)*/
@@ -168,12 +168,12 @@ int main(int argc, char **argv)
     else
         return 0;
 
-    gft::Image32::Write(label, (char *)"out/label.pgm");
+    gft::Image32::Write(label, (char *)"unsupseg/out/label.pgm");
     ctmp = gft::CImage::RandomColorize(label);
-    gft::CImage::Write(ctmp, (char *)"out/label.ppm");
+    gft::CImage::Write(ctmp, (char *)"unsupseg/out/label.ppm");
     gft::CImage::Destroy(&ctmp);
     ctmp = gft::CImage::ColorizeByAverageColor(cimg, label);
-    gft::CImage::Write(ctmp, (char *)"out/labelcolor.ppm");
+    gft::CImage::Write(ctmp, (char *)"unsupseg/out/labelcolor.ppm");
     gft::CImage::Destroy(&ctmp);
 
     printf("(Min,Max): (%d %d)\n",

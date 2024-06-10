@@ -19,11 +19,15 @@ class Unsupseg:
     def run(self, type, image, method, k, pol, SPsize):
         # Convert the image to PPM if it's a PNG or JPG
         image = self.convert_image_to_ppm(image)
-        subprocess.run([self.command, type, image, method, k, pol, SPsize])
+        result = subprocess.run([self.command, type, image, method, k, pol, SPsize], capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"Error running subprocess: {result.stderr}")
+        else:
+            print(f"Subprocess output: {result.stdout}")
 
     def load_image(self, image_path):
         with Image.open(image_path) as img:
             print(f"Image mode: {img.mode}, max pixel value: {img.getextrema()}")
-            img = img.convert('I')  
+            img = img.convert('I')
             img_array = np.array(img)
         return img_array
